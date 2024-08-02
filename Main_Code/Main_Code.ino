@@ -29,9 +29,31 @@ decode_results results; // kumandadan gelen sinyali çözmek için türetilen ne
 #define star 16738455  // HIZ ARTTIRMA
 #define kare 16756815  // HIZ AZALTMA
 
+// Bu kısım Arduino'ya ilk kez enerji verildiğinde/kart resetlendiğinde
+// yalnızca bir defa çalışır.
 void setup() {
-  // put your setup code here, to run once:
+  // Motor sürücüye arduinodan bilgi aktarılacak
+  pinMode(OUT1, OUTPUT); 
+  pinMode(OUT2, OUTPUT);
+  pinMode(OUT3, OUTPUT);
+  pinMode(OUT4, OUTPUT);
+  pinMode(motor_kontrol_1, OUTPUT);
+  pinMode(motor_kontrol_2, OUTPUT);
 
+  // HCSR04 sensörünün pinlerinin işlevleri
+  pinMode(echoPin, INTPUT); // Dışardan gelen sinyali alacak
+  pinMode(trigPin, OUTPUT); // Dışarıya ultrasonik sinyal verecek
+
+  // Arduino kartına enerji verir vermez aracın hareket etmemesi için:
+  digitalWrite(motor_kontrol_1, LOW);
+  digitalWrite(motor_kontrol_2, LOW);
+  digitalWrite(OUT1, LOW);
+  digitalWrite(OUT2, LOW);
+  digitalWrite(OUT3, LOW);
+  digitalWrite(OUT4, LOW);
+
+  // IR alıcısının başlatılması:
+  ir_alici.enableIRIn();
 }
 
 void loop() {
