@@ -14,7 +14,7 @@ const int EN_B = 10; // Motor sürücünün ENB Pini - OUT3/4
 const int echoPin = 11;
 const int trigPin = 12;
 // Motorların çalışması için ENA ve ENB çıkışlarına gönderilecek PWM sinyalinin sabit değeri
-int hiz = 80; 
+int hiz = 155; 
 
 // IR Sensörü pin tanımlamaları:
 IRrecv ir_alici(ir_data_pini);
@@ -59,7 +59,6 @@ void setup() {
 
 void loop() {
   int mesafe = mesafe_olcumu();
-  
   if(mesafe > 40) {
     // Kumandadan herhangi bir tuşa basılıp basılmadığını kontrol ediyoruz
     if(ir_alici.decode(&results)) {
@@ -88,12 +87,12 @@ void loop() {
           Serial.println(results.value);
           break;
         case left:
-          motor_hareketleri(1, 0, 1, 0, hiz);
+          motor_hareketleri(0, 1, 0, 1, hiz);
           Serial.println("Sola dondu");
           Serial.println(results.value);
           break;
         case right:
-          motor_hareketleri(0, 1, 0, 1, hiz);
+          motor_hareketleri(1, 0, 1, 0, hiz);
           Serial.println("Saga dondu");
           Serial.println(results.value);
           break;
