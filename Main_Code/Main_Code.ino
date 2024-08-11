@@ -11,7 +11,7 @@ const int EN_A = 9; // Motor sürücünün ENA (PWM özellikli) - OUT1/2
 const int EN_B = 10; // Motor sürücünün ENB Pini - OUT3/4
 
 // HCSR04 Ultaronik mesafe sensörü pin tanımlamaları:
-const int echoPin = 11;
+const int echoPin = 11; // Arduinoya sinyal gönderiyor
 const int trigPin = 12;
 // Motorların çalışması için ENA ve ENB çıkışlarına gönderilecek PWM sinyalinin sabit değeri
 int hiz = 155; 
@@ -41,8 +41,8 @@ void setup() {
   pinMode(EN_B, OUTPUT);
 
   // HCSR04 sensörünün pinlerinin işlevleri
-  pinMode(echoPin, INPUT); // Dışardan gelen sinyali alacak
-  pinMode(trigPin, OUTPUT); // Dışarıya ultrasonik sinyal verecek
+  pinMode(echoPin, INPUT); // Arduinoya sinyal gönderecek
+  pinMode(trigPin, OUTPUT); // Arduinodan sensöre sinyal gönderecek
 
   // Arduino kartına enerji verir vermez aracın hareket etmemesi için:
   digitalWrite(EN_A, LOW);
@@ -67,45 +67,33 @@ void loop() {
         case kare:
           if(hiz < 255)
             hiz += 5;
-          Serial.println("Hizlandi");
-          Serial.println(results.value);
           break;
         case star:
           if(hiz > 80)
             hiz -= 5;
-          Serial.println("Yavasladi");
-          Serial.println(results.value);
           break;
         case up:
           motor_hareketleri(1, 0, 0, 1, hiz);
-          Serial.println("Ileri gitti");
-          Serial.println(results.value);
           break;
         case down:
           motor_hareketleri(0, 1, 1, 0, hiz);
-          Serial.println("Geri gitti");
-          Serial.println(results.value);
           break;
         case left:
-          motor_hareketleri(0, 1, 0, 1, hiz);
-          Serial.println("Sola dondu");
-          Serial.println(results.value);
+          motor_hareketleri(1, 0, 1, 0, hiz);
           break;
         case right:
-          motor_hareketleri(1, 0, 1, 0, hiz);
-          Serial.println("Saga dondu");
-          Serial.println(results.value);
+          motor_hareketleri(0, 1, 0, 1, hiz);
           break;
         case zero:
           motor_hareketleri(0, 0, 0, 0, 0);
-          Serial.println("Durdu");
-          Serial.println(results.value);
           break;
       }
       ir_alici.resume();
     }
   }
   else {
+    Serial.println("else girdi");
+    Serial.println(mesafe);
     // Önde engel varsa araç geri gider
     motor_hareketleri(0, 1, 1, 0, hiz);
     delay(500);
